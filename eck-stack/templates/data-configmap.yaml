@@ -9,12 +9,12 @@ data:
     
     function import_index {
         echo "Testing connection to Kibana"
-        until $(curl -k -X GET http://${KIBANA_URL}:${KIBANA_PORT}/_cluster/health); do sleep 5; done
-        until [ "$(curl -k -X GET http://${KIBANA_URL}:${KIBANA_PORT}/_cluster/health | wc -l)" == "0" ]
+        until $(curl -k -X GET ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/_cluster/health); do sleep 5; done
+        until [ "$(curl -k -X GET ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/_cluster/health | wc -l)" == "0" ]
         do sleep 5
         done
         echo "Importing index..."
-        OUTPUT=$(curl -k --user ${ELASTIC_USER}:${ELASTIC_PWD} -X POST http://${KIBANA_URL}:${KIBANA_PORT}/api/saved_objects/_import -H "kbn-xsrf: true" --form file=@/kibana/index_pattern.ndjson)
+        OUTPUT=$(curl -k --user ${ELASTIC_USER}:${ELASTIC_PWD} -X POST ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/api/saved_objects/_import -H "kbn-xsrf: true" --form file=@/kibana/index_pattern.ndjson)
         SUCCESS=$(echo ${OUTPUT} | grep -o '"successCount":1' | wc -l)
         if [[ ${SUCCESS} == "1" ]]; then
           printf "\n########## Imported index-pattern successfully! #############################\n"

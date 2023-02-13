@@ -5,15 +5,12 @@ Requirements:
  2. Kubernetes config file configured to the cluster
 
 For a fast & easy installation run:
- 1. `cp install.sh ../`
- 2. `cd ..`
- 3. `./install.sh -n logging -p YOURPWD`
+
+`./install.sh -n logging -p YOURPWD`
 
 
 To uninstall the stack, run:
- 1. `cp uninstall.sh ../`
- 2. `cd ..`
- 3. `./uninstall.sh -n logging`
+`./uninstall.sh -n logging`
 
 ## Values
 
