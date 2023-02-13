@@ -7,12 +7,12 @@ nameOverride: ""
 fullnameOverride: ""
 
 elasticsearch: 
-  version: 8.5.0 #checked
+  version: 8.5.0
   master:
-    replicas: 1 #checked
+    replicas: 1
     volume:
-      storageClass: gp2 #checked
-      size: 10Gi #checked
+      storageClass: gp2
+      size: 10Gi
   data:
     replicas: 1
     volume:
