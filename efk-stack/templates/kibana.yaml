@@ -1,14 +1,14 @@
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  name: {{ include "efk-stack.fullname" . }}-{{ .Values.kibana.service.name }}
+  name: {{ include "efk-stack.fullname" . }}-kibana
   annotations:
     eck.k8s.elastic.co/license: basic
 spec:
   version: {{ .Values.kibana.version | default .Values.elasticsearch.version | default "8.5.0" }}
   count: 1
   elasticsearchRef:
-    name: {{ include "efk-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}
+    name: {{ include "efk-stack.fullname" . }}-elasticsearch
   http:
     service:
       spec:

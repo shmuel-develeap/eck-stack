@@ -18,15 +18,12 @@ A Helm chart for Kubernetes
 | elasticsearch.master.volume.storageClass | string | `"gp2"` |  |
 | elasticsearch.resources.limits.cpu | string | `"300m"` |  |
 | elasticsearch.resources.limits.memory | string | `"1Gi"` |  |
-| elasticsearch.service.name | string | `"elasticsearch"` |  |
 | elasticsearch.version | string | `"8.5.0"` |  |
 | fluentd.config.name | string | `"fluentdconfig"` |  |
-| fluentd.service.name | string | `"fluentd"` |  |
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | kibana.http.tls.disabled | bool | `true` |  |
 | kibana.password | string | `nil` |  |
-| kibana.service.name | string | `"kibana"` |  |
 | kibana.service.port | int | `5601` |  |
 | kibana.service.targetPort | int | `5601` |  |
 | kibana.service.type | string | `"NodePort"` |  |

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "efk-stack.fullname" . }}-{{ .Values.fluentd.service.name }}
+  name: {{ include "efk-stack.fullname" . }}-fluentd
   labels:
     k8s-app: fluentd-logging
     version: v1
@@ -28,7 +28,7 @@ spec:
         image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: {{ include "efk-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}-es-master
+            value: {{ include "efk-stack.fullname" . }}-elasticsearch-es-master
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME

@@ -25,7 +25,7 @@ spec:
           value: https      
           {{- end }}
         - name: ELASTICSEARCH_URL
-          value: {{ include "efk-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}-es-master
+          value: {{ include "efk-stack.fullname" . }}-elasticsearch-es-master
         - name: ELASTICSEARCH_PORT
           value: "9200"
         - name: KIBANA_PROTOCOL
@@ -35,7 +35,7 @@ spec:
           value: https      
           {{- end }}
         - name: KIBANA_URL
-          value: {{ include "efk-stack.fullname" . }}-{{ .Values.kibana.service.name }}-kb-http
+          value: {{ include "efk-stack.fullname" . }}-kibana-kb-http
         - name: KIBANA_PORT
           value: "{{ .Values.kibana.service.port }}"
         - name: ELASTIC_USER
