@@ -40,4 +40,4 @@ fi
 /usr/bin/env helm repo update
 kubectl create ns ${NAMESPACE}
 /usr/bin/env helm upgrade --install elastic-operator elastic/eck-operator -n ${NAMESPACE}
-/usr/bin/env helm upgrade --install eck-stack eck-stack/ -n ${NAMESPACE} --set kibana.password=${KIBANA_PWD}
+/usr/bin/env helm upgrade --install efk-stack efk-stack/ -n ${NAMESPACE} --set kibana.password=${KIBANA_PWD}

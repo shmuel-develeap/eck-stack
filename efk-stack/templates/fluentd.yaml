@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "eck-stack.fullname" . }}-{{ .Values.fluentd.service.name }}
+  name: {{ include "efk-stack.fullname" . }}-{{ .Values.fluentd.service.name }}
   labels:
     k8s-app: fluentd-logging
     version: v1
@@ -16,8 +16,8 @@ spec:
         k8s-app: fluentd-logging
         version: v1
     spec:
-      serviceAccount: {{ include "eck-stack.fullname" . }}-fluentd
-      serviceAccountName: {{ include "eck-stack.fullname" . }}-fluentd
+      serviceAccount: {{ include "efk-stack.fullname" . }}-fluentd
+      serviceAccountName: {{ include "efk-stack.fullname" . }}-fluentd
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         effect: NoSchedule
@@ -28,7 +28,7 @@ spec:
         image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: {{ include "eck-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}-es-master
+            value: {{ include "efk-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}-es-master
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
@@ -52,7 +52,7 @@ spec:
           - name: FLUENT_ELASTICSEARCH_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "eck-stack.fullname" . }}-elasticsearch-es-elastic-user
+                name: {{ include "efk-stack.fullname" . }}-elasticsearch-es-elastic-user
                 key: elastic
           - name: FLUENT_ELASTICSEARCH_INDEX_NAME
             value: fluentd

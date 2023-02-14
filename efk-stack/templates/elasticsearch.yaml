@@ -1,7 +1,7 @@
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
-  name: {{ include "eck-stack.fullname" . }}-elasticsearch
+  name: {{ include "efk-stack.fullname" . }}-elasticsearch
   annotations:
     eck.k8s.elastic.co/license: basic
 spec:

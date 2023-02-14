@@ -1,11 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "eck-stack.fullname" . }}-kibana-import
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-weight": "5"
-    # "helm.sh/hook-delete-policy": hook-succeeded
+  name: {{ include "efk-stack.fullname" . }}-kibana-import
 spec:
   backoffLimit: 0
   ttlSecondsAfterFinished: 120
@@ -15,13 +11,23 @@ spec:
       volumes:
       - name: kibana-data
         configMap:
-            name: kibana-data
+            name: {{ include "efk-stack.fullname" . }}-kibana-data
             defaultMode: 0777
       containers:
       - name: kibana-import
-        image: couchbase/centos7-systemd
+        image: alpine/curl
         imagePullPolicy: IfNotPresent
         env:
+        - name: ELASTICSEARCH_PROTOCOL
+          {{- if .Values.elasticsearch.http.tls.disabled }}
+          value: http
+          {{- else }}     
+          value: https      
+          {{- end }}
+        - name: ELASTICSEARCH_URL
+          value: {{ include "efk-stack.fullname" . }}-{{ .Values.elasticsearch.service.name }}-es-master
+        - name: ELASTICSEARCH_PORT
+          value: "9200"
         - name: KIBANA_PROTOCOL
           {{- if .Values.kibana.http.tls.disabled }}
           value: http
@@ -29,7 +35,7 @@ spec:
           value: https      
           {{- end }}
         - name: KIBANA_URL
-          value: {{ include "eck-stack.fullname" . }}-{{ .Values.kibana.service.name }}-kb-http
+          value: {{ include "efk-stack.fullname" . }}-{{ .Values.kibana.service.name }}-kb-http
         - name: KIBANA_PORT
           value: "{{ .Values.kibana.service.port }}"
         - name: ELASTIC_USER
@@ -37,7 +43,7 @@ spec:
         - name: ELASTIC_PWD
           valueFrom:
             secretKeyRef:
-              name: {{ include "eck-stack.fullname" . }}-elasticsearch-es-elastic-user
+              name: {{ include "efk-stack.fullname" . }}-elasticsearch-es-elastic-user
               key: elastic
         command: ["/bin/sh","/kibana/curl-script.sh"]
         volumeMounts:
