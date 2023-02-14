@@ -9,6 +9,8 @@ data:
     
     function import_index {
         echo "Testing connection to ElasticSearch & Kibana..."
+
+        echo "Waiting for readiness of elasticSearch..."
         until [ \
           $(curl --insecure --user ${ELASTIC_USER}:${ELASTIC_PWD} \
             --silent --output /dev/null \
@@ -16,29 +18,33 @@ data:
             ${ELASTICSEARCH_PROTOCOL}://${ELASTICSEARCH_URL}:${ELASTICSEARCH_PORT}/_cluster/health) \
            -eq 200 \
         ] ; do 
+            sleep 5
             echo "Waiting for readiness of elasticSearch..."
-            sleep 5
         done
-        sleep 5
+        echo "elasticSearch ready"
+
         until [ \
-          $(curl --insecure --silent --output /dev/null \
+          $(curl --insecure --user ${ELASTIC_USER}:${ELASTIC_PWD} \
+            --silent --output /dev/null \
             --write-out "%{http_code}" \
-            ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/login) \
-           -eq 200 \
-        ] ; do 
-            echo "Waiting for readiness of kibana ..."
+          ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/_cluster/health) \
+           -eq 404 \
+        ] ; do
             sleep 5
+            echo "Waiting for readiness of kibana..."
         done
+        echo "kibana ready"
+
         echo "Importing index..."
         OUTPUT=$(curl --insecure --user ${ELASTIC_USER}:${ELASTIC_PWD} -X POST ${KIBANA_PROTOCOL}://${KIBANA_URL}:${KIBANA_PORT}/api/saved_objects/_import -H "kbn-xsrf: true" --form file=@/kibana/index_pattern.ndjson)
         SUCCESS=$(echo ${OUTPUT} | grep -o '"successCount":1' | wc -l)
+            
         if [[ ${SUCCESS} == "1" ]]; then
           printf "\n########## Imported index-pattern successfully! #############################\n"
         else
           printf "\n########## Failure while importing index-pattern #############\n"
           exit 1
         fi
-        echo ${OUTPUT}
     }
 
     import_index
